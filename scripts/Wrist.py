@@ -5,19 +5,12 @@ import pandas as pd
 
 from utils import clamp_matrix
 
-Left_wrist_yaw_stand_init =  math.radians(8.0)
-Right_wrist_yaw_stand_init =  math.radians(7.2)
+Left_wrist_yaw_stand_init = math.radians(8.0)
+Right_wrist_yaw_stand_init = math.radians(7.2)
 
 print Left_wrist_yaw_stand_init
 print Right_wrist_yaw_stand_init
 
-left_yaw_degrees_list = []
-left_pitch_degrees_list = []
-left_roll_degrees_list = []
-
-right_yaw_degrees_list = []
-right_pitch_degrees_list = []
-right_roll_degrees_list = []
 
 def cross_product(a, b):
     return (a[1] * b[2] - a[2] * b[1],
@@ -31,7 +24,6 @@ def normalize(v):
 
 
 def calculate_wrist_orientation(wrist_palm_vectors):
-
     # Calculate average (mean) vector for Forward direction
     F = tuple(sum(v[i] for v in wrist_palm_vectors) / len(wrist_palm_vectors) for i in range(3))
     # Assuming the third vector (index 2) is the middle finger for the Up direction
@@ -52,6 +44,7 @@ def calculate_wrist_orientation(wrist_palm_vectors):
     roll = math.atan2(U[2], S[2])
 
     return yaw, pitch, roll
+
 
 def get_wrist_angle_list(directional_vecs):
     # ------------------------------------------- Left -------------------------------------------
@@ -74,9 +67,15 @@ def get_wrist_angle_list(directional_vecs):
     left_pitch_radians_list = []
     left_roll_radians_list = []
 
+    left_yaw_degrees_list = []
+    left_pitch_degrees_list = []
+    left_roll_degrees_list = []
+
     for i in range(directional_vecs.shape[0]):
-        left_yaw_radians, left_pitch_radians, left_roll_radians = calculate_wrist_orientation([left_wrist_left_index_1_squeeze[i], left_wrist_left_middle_1_squeeze[i], left_wrist_left_pinky_1_squeeze[i],
-    left_wrist_left_ring_1_squeeze[i], left_wrist_left_thumb_1_squeeze[i]])
+        left_yaw_radians, left_pitch_radians, left_roll_radians = calculate_wrist_orientation(
+            [left_wrist_left_index_1_squeeze[i], left_wrist_left_middle_1_squeeze[i],
+             left_wrist_left_pinky_1_squeeze[i],
+             left_wrist_left_ring_1_squeeze[i], left_wrist_left_thumb_1_squeeze[i]])
 
         left_yaw_radians_list.append(left_yaw_radians)
         left_pitch_radians_list.append(left_pitch_radians)
@@ -94,14 +93,22 @@ def get_wrist_angle_list(directional_vecs):
     for i, roll_radians in enumerate(left_roll_radians_list):
         left_roll_radians_list[i] = left_roll_radians_list[i] - left_roll_radians_first_temp
 
+    for radians in left_yaw_radians_list:
+        left_yaw_degrees_list.append(math.degrees(radians))
 
-    print "left_yaw_radians_list = {}".format(left_yaw_radians_list)
-    print "left_pitch_radians_list = {}".format(left_pitch_radians_list)
-    print "left_roll_radians_list = {}".format(left_roll_radians_list)
+    for radians in left_pitch_radians_list:
+        left_pitch_degrees_list.append(math.degrees(radians))
 
-    # print "left_wrist_yaw_degrees = {}".format(left_yaw_degrees_list)
-    # print "left_wrist_pitch_degrees = {}".format(left_pitch_degrees_list)
-    # print "left_wrist_roll_degrees = {}".format(left_roll_degrees_list)
+    for radians in left_roll_radians_list:
+        left_roll_degrees_list.append(math.degrees(radians))
+
+    print "left_wrist_yaw_radians = {}".format(left_yaw_radians_list)
+    print "left_wrist_pitch_radians = {}".format(left_pitch_radians_list)
+    print "left_wrist_roll_radians = {}".format(left_roll_radians_list)
+
+    print "left_wrist_yaw_degrees = {}".format(left_yaw_degrees_list)
+    print "left_wrist_pitch_degrees = {}".format(left_pitch_degrees_list)
+    print "left_wrist_roll_degrees = {}".format(left_roll_degrees_list)
 
     # ------------------------------------------- Right -------------------------------------------
 
@@ -124,9 +131,15 @@ def get_wrist_angle_list(directional_vecs):
     right_pitch_radians_list = []
     right_roll_radians_list = []
 
+    right_yaw_degrees_list = []
+    right_pitch_degrees_list = []
+    right_roll_degrees_list = []
+
     for i in range(directional_vecs.shape[0]):
-        right_yaw_radians, right_pitch_radians, right_roll_radians = calculate_wrist_orientation([right_wrist_right_index_1_squeeze[i], right_wrist_right_middle_1_squeeze[i], right_wrist_right_pinky_1_squeeze[i],
-    right_wrist_right_ring_1_squeeze[i], right_wrist_right_thumb_1_squeeze[i]])
+        right_yaw_radians, right_pitch_radians, right_roll_radians = calculate_wrist_orientation(
+            [right_wrist_right_index_1_squeeze[i], right_wrist_right_middle_1_squeeze[i],
+             right_wrist_right_pinky_1_squeeze[i],
+             right_wrist_right_ring_1_squeeze[i], right_wrist_right_thumb_1_squeeze[i]])
 
         right_yaw_radians_list.append(right_yaw_radians)
         right_pitch_radians_list.append(right_pitch_radians)
@@ -136,7 +149,8 @@ def get_wrist_angle_list(directional_vecs):
     right_pitch_radians_first_temp = right_pitch_radians_list[0]
     right_roll_radians_first_temp = right_roll_radians_list[0]
     for i, yaw_radians in enumerate(right_yaw_radians_list):
-        right_yaw_radians_list[i] = right_yaw_radians_list[i] - right_yaw_radians_first_temp + Right_wrist_yaw_stand_init
+        right_yaw_radians_list[i] = right_yaw_radians_list[
+                                        i] - right_yaw_radians_first_temp + Right_wrist_yaw_stand_init
 
     for i, pitch_radians in enumerate(right_pitch_radians_list):
         right_pitch_radians_list[i] = right_pitch_radians_list[i] - right_pitch_radians_first_temp
@@ -144,14 +158,22 @@ def get_wrist_angle_list(directional_vecs):
     for i, roll_radians in enumerate(right_roll_radians_list):
         right_roll_radians_list[i] = right_roll_radians_list[i] - right_roll_radians_first_temp
 
+    for radians in right_yaw_radians_list:
+        right_yaw_degrees_list.append(math.degrees(radians))
 
-    print "right_yaw_radians_list = {}".format(right_yaw_radians_list)
-    print "right_pitch_radians_list = {}".format(right_pitch_radians_list)
-    print "right_roll_radians_list = {}".format(right_roll_radians_list)
+    for radians in right_pitch_radians_list:
+        right_pitch_degrees_list.append(math.degrees(radians))
 
-    # print "right_wrist_yaw_degrees = {}".format(right_yaw_degrees_list)
-    # print "right_wrist_pitch_degrees = {}".format(right_pitch_degrees_list)
-    # print "right_wrist_roll_degrees = {}".format(right_roll_degrees_list)
+    for radians in right_roll_radians_list:
+        right_roll_degrees_list.append(math.degrees(radians))
+
+    print "right_wrist_yaw_radians = {}".format(right_yaw_radians_list)
+    print "right_wrist_pitch_radians = {}".format(right_pitch_radians_list)
+    print "right_wrist_roll_radians = {}".format(right_roll_radians_list)
+
+    print "right_wrist_yaw_degrees = {}".format(right_yaw_degrees_list)
+    print "right_wrist_pitch_degrees = {}".format(right_pitch_degrees_list)
+    print "right_wrist_roll_degrees = {}".format(right_roll_degrees_list)
 
     return left_yaw_radians_list, left_pitch_radians_list, left_roll_radians_list, right_yaw_radians_list, right_pitch_radians_list, right_roll_radians_list
 

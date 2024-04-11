@@ -69,9 +69,9 @@ def get_head_angle_list(directional_vecs):
     for i, roll_radians in enumerate(roll_radians_list):
         roll_radians_list[i] = roll_radians_list[i] - roll_radians_first_temp
 
-    print "yaw_radians_list = {}".format(yaw_radians_list)
-    print "pitch_radians_list = {}".format(pitch_radians_list)
-    print "roll_radians_list = {}".format(roll_radians_list)
+    print "head_yaw_radians = {}".format(yaw_radians_list)
+    print "head_pitch_radians = {}".format(pitch_radians_list)
+    print "head_roll_radians = {}".format(roll_radians_list)
 
     return yaw_radians_list, pitch_radians_list, roll_radians_list
 

@@ -3,11 +3,7 @@ import math
 import numpy as np
 import pandas as pd
 
-Left_wrist_stand_init =  math.radians(8.0)
-Right_wrist_stand_init =  math.radians(7.2)
-
-print Left_wrist_stand_init
-print Right_wrist_stand_init
+from utils import clamp_matrix
 
 def calculate_elbow_orientation(elbow_wrist_squeeze):
     yaw_radians_list = []
@@ -49,6 +45,7 @@ def calculate_elbow_orientation(elbow_wrist_squeeze):
 
 
 def get_elbow_angle_list(directional_vecs):
+    # ------------------------------------------- Left -------------------------------------------
     # Vector from left elbow-wrist
     left_elbow_wrist_squeeze = np.squeeze(directional_vecs[:, [4], :])
 
@@ -59,6 +56,7 @@ def get_elbow_angle_list(directional_vecs):
     print "left_elbow_pitch_radians = {}".format(left_pitch_radians)
     print "left_elbow_roll_radians = {}".format(left_roll_radians)
 
+    # ------------------------------------------- Right -------------------------------------------
     # Vector from right elbow-wrist
     right_elbow_wrist_squeeze = np.squeeze(directional_vecs[:, [21], :])
 
@@ -86,6 +84,10 @@ if __name__ == '__main__':
     obj = pd.read_pickle("../generation_results/o1rERZRFyqE_112_4_0.pkl")
     directional_vecs = obj['out_dir_vec']
     directional_vecs = directional_vecs.reshape(directional_vecs.shape[0], 42, 3)
+    # clamp the matrix
+    # process if the element is greater than 1 or less than -1
+    directional_vecs = clamp_matrix(directional_vecs)
+
 
     # Only test the first frame
     get_elbow_angle_list(directional_vecs)

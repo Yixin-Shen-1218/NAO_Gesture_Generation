@@ -3,6 +3,11 @@ import math
 import numpy as np
 import pandas as pd
 
+Left_wrist_stand_init =  math.radians(8.0)
+Right_wrist_stand_init =  math.radians(7.2)
+
+print Left_wrist_stand_init
+print Right_wrist_stand_init
 
 def calculate_elbow_orientation(elbow_wrist_squeeze):
     yaw_radians_list = []
@@ -47,15 +52,15 @@ def get_elbow_angle_list(directional_vecs):
     # Vector from left elbow-wrist
     left_elbow_wrist_squeeze = np.squeeze(directional_vecs[:, [4], :])
 
-    # Vector from right elbow-wrist
-    right_elbow_wrist_squeeze = np.squeeze(directional_vecs[:, [21], :])
-
     left_yaw_radians, left_pitch_radians, left_roll_radians = calculate_elbow_orientation(
         left_elbow_wrist_squeeze)
 
     print "left_elbow_yaw_radians = {}".format(left_yaw_radians)
     print "left_elbow_pitch_radians = {}".format(left_pitch_radians)
     print "left_elbow_roll_radians = {}".format(left_roll_radians)
+
+    # Vector from right elbow-wrist
+    right_elbow_wrist_squeeze = np.squeeze(directional_vecs[:, [21], :])
 
     right_yaw_radians, right_pitch_radians, right_roll_radians = calculate_elbow_orientation(
         right_elbow_wrist_squeeze)

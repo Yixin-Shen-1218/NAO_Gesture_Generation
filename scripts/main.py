@@ -11,6 +11,7 @@ import qi
 from Head import get_head_angle_list
 from Shoulder import get_shoulder_angle_list
 from Elbow import get_elbow_angle_list
+from Wrist import get_wrist_angle_list
 from utils import clamp_matrix
 
 
@@ -95,7 +96,7 @@ def main(session, directional_vecs):
     posture_service = session.service("ALRobotPosture")
 
     # Wake up robot
-    motion_service.wakeUp()
+    # motion_service.wakeUp()
 
     motion_service.setStiffnesses("Body", 1.0)
 
@@ -104,7 +105,7 @@ def main(session, directional_vecs):
 
     # Example showing multiple trajectories
     names = ["HeadYaw", "HeadPitch", "LShoulderPitch", "LShoulderRoll", "RShoulderPitch", "RShoulderRoll", "LElbowYaw", "LElbowRoll",
-             "RElbowYaw", "RElbowRoll"]
+             "RElbowYaw", "RElbowRoll", "LWristYaw", "RWristYaw"]
 
     head_yaw_radians, head_pitch_radians, head_roll_radians = get_head_angle_list(directional_vecs)
     print "\n\n"
@@ -113,6 +114,12 @@ def main(session, directional_vecs):
     print "\n\n"
 
     left_elbow_yaw_radians, left_elbow_pitch_radians, left_elbow_roll_radians, right_elbow_yaw_radians, right_elbow_pitch_radians, right_elbow_roll_radians = get_elbow_angle_list(directional_vecs)
+    print "\n\n"
+
+    left_wrist_yaw_radians, left_wrist_pitch_radians, left_wrist_roll_radians, right_wrist_yaw_radians, right_wrist_pitch_radians, right_wrist_roll_radians = get_wrist_angle_list(directional_vecs)
+    print "\n\n"
+
+    left_hand_yaw_radians, left_hand_pitch_radians, left_hand_roll_radians, right_hand_yaw_radians, right_hand_pitch_radians, right_hand_roll_radians = get_hand_angle_list(directional_vecs)
     print "\n\n"
 
     frame_number = directional_vecs.shape[0]
@@ -130,7 +137,7 @@ def main(session, directional_vecs):
                                               left_shoulder_roll_radians[:3],
                                               right_shoulder_pitch_radians[:3], right_shoulder_roll_radians[:3],
                                       left_elbow_yaw_radians[:3], left_elbow_roll_radians[:3], right_elbow_yaw_radians[:3],
-                                      right_elbow_roll_radians[:3]],
+                                      right_elbow_roll_radians[:3], left_wrist_yaw_radians[:3], right_wrist_yaw_radians[:3]],
                                       timeLists, isAbsolute)
 
     # timeLists = generate_n_copies_of_time_list(timeList, n=len(names))

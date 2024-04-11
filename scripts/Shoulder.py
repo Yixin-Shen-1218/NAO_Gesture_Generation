@@ -54,15 +54,15 @@ def get_shoulder_angle_list(directional_vecs):
     # Vector from left shoulder-elbow
     left_shoulder_elbow_squeeze = np.squeeze(directional_vecs[:, [3], :])
 
-    # Vector from right shoulder-elbow
-    right_shoulder_elbow_squeeze = np.squeeze(directional_vecs[:, [20], :])
-
     left_yaw_radians, left_pitch_radians, left_roll_radians = calculate_shoulder_orientation(
         left_shoulder_elbow_squeeze)
 
     print "left_shoulder_yaw_radians = {}".format(left_yaw_radians)
     print "left_shoulder_pitch_radians = {}".format(left_pitch_radians)
     print "left_shoulder_roll_radians = {}".format(left_roll_radians)
+
+    # Vector from right shoulder-elbow
+    right_shoulder_elbow_squeeze = np.squeeze(directional_vecs[:, [20], :])
 
     right_yaw_radians, right_pitch_radians, right_roll_radians = calculate_shoulder_orientation(
         right_shoulder_elbow_squeeze)

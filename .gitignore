@@ -3,3 +3,4 @@ generation_results/
 output/
 .idea
 scripts_learning/
+*.pyc

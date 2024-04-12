@@ -10,8 +10,8 @@ from utils import clamp_matrix, scale_to_range
 head_yaw_radian_range = [math.radians(-15), math.radians(15)]
 # print head_yaw_radian_range
 
-head_pitch_radian_range = [math.radians(-15), math.radians(5)]
-# print head_yaw_radian_range
+head_pitch_radian_range = [math.radians(-15), math.radians(0)]
+# print head_pitch_radian_range
 
 def calculate_head_orientation(neck_to_nose, nose_to_right_eye, nose_to_left_eye, right_eye_to_right_ear,
                                left_eye_to_left_ear):
@@ -148,14 +148,16 @@ def get_head_angle_list(directional_vecs):
     print "yaw_radians_list_scaled = {}".format(yaw_radians_list_scaled)
 
     print "head_pitch_radians = {}".format(pitch_radians_list)
-    print "head_roll_radians = {}".format(roll_radians_list)
+
+    pitch_radians_list_scaled = scale_to_range(pitch_radians_list, target_min = head_pitch_radian_range[0], target_max = head_pitch_radian_range[1])
+    print "pitch_radians_list_scaled = {}".format(pitch_radians_list_scaled)
 
     print "head_yaw_degrees = {}".format(yaw_degrees_list)
     print "head_pitch_degrees = {}".format(pitch_degrees_list)
     print "head_roll_degrees = {}".format(roll_degrees_list)
 
     # return yaw_radians_list, pitch_radians_list, roll_radians_list
-    return yaw_radians_list_scaled, pitch_radians_list, roll_radians_list
+    return yaw_radians_list_scaled, pitch_radians_list_scaled, roll_radians_list
 
 
 if __name__ == '__main__':

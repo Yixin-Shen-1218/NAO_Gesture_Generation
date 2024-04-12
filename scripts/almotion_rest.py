@@ -21,7 +21,7 @@ def main(session):
     motion_service.wakeUp()
 
     # Send robot to Pose Init
-    posture_service.goToPosture("Stand", 1)
+    # posture_service.goToPosture("Stand", 1)
 
     # # Go to rest position
     motion_service.rest()

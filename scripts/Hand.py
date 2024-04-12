@@ -4,7 +4,7 @@ import pandas as pd
 
 from utils import clamp_matrix
 
-def calculate_hand_orientation(left_index_2_squeeze, left_middle_2_squeeze, left_pinky_2_squeeze, left_ring_2_squeeze, left_thumb_2_squeeze):
+def calculate_hand_orientation(index_2_squeeze, middle_2_squeeze, pinky_2_squeeze, ring_2_squeeze, thumb_2_squeeze):
     """
     Calculates the mean of five directional vectors and returns the yaw, pitch, and roll.
 
@@ -15,7 +15,7 @@ def calculate_hand_orientation(left_index_2_squeeze, left_middle_2_squeeze, left
     tuple: The yaw, pitch, and roll of the mean directional vector.
     """
     # Calculate the mean vector
-    mean_vector = (left_index_2_squeeze + left_middle_2_squeeze + left_pinky_2_squeeze + left_ring_2_squeeze + left_thumb_2_squeeze) / 5
+    mean_vector = (index_2_squeeze + middle_2_squeeze + pinky_2_squeeze + ring_2_squeeze + thumb_2_squeeze) / 5
 
     # Normalize the mean vector
     mean_vector = mean_vector / np.linalg.norm(mean_vector)
@@ -81,11 +81,59 @@ def get_hand_angle_list(directional_vecs):
     print "left_hand_roll_degrees = {}".format(left_roll_degrees_list)
 
     # ------------------------------------------- Right -------------------------------------------
+    # Vector from right index 2
+    right_index_2_squeeze = np.squeeze(directional_vecs[:, [23], :])
+
+    # Vector from right middle 2
+    right_middle_2_squeeze = np.squeeze(directional_vecs[:, [26], :])
+
+    # Vector from right pinky 2
+    right_pinky_2_squeeze = np.squeeze(directional_vecs[:, [29], :])
+
+    # Vector from right ring 2
+    right_ring_2_squeeze = np.squeeze(directional_vecs[:, [32], :])
+
+    # Vector from right thumb 2
+    right_thumb_2_squeeze = np.squeeze(directional_vecs[:, [35], :])
+
+    right_yaw_radians_list = []
+    right_pitch_radians_list = []
+    right_roll_radians_list = []
+
+    right_yaw_degrees_list = []
+    right_pitch_degrees_list = []
+    right_roll_degrees_list = []
+
+    for i in range(directional_vecs.shape[0]):
+        right_yaw_radians, right_pitch_radians, right_roll_radians = calculate_hand_orientation(
+            right_index_2_squeeze[i], right_middle_2_squeeze[i], right_pinky_2_squeeze[i], right_ring_2_squeeze[i], right_thumb_2_squeeze[i])
+
+        right_yaw_radians_list.append(right_yaw_radians)
+        right_pitch_radians_list.append(right_pitch_radians)
+        right_roll_radians_list.append(right_roll_radians)
 
 
+    for radians in right_yaw_radians_list:
+        right_yaw_degrees_list.append(math.degrees(radians))
 
-    # return left_yaw_radians, left_pitch_radians, left_roll_radians, right_yaw_radians, right_pitch_radians, right_roll_radians
-    return left_yaw_radians, left_pitch_radians, left_roll_radians
+    for radians in right_pitch_radians_list:
+        right_pitch_degrees_list.append(math.degrees(radians))
+
+    for radians in right_roll_radians_list:
+        right_roll_degrees_list.append(math.degrees(radians))
+
+
+    print "right_hand_yaw_radians = {}".format(right_yaw_radians_list)
+    print "right_hand_pitch_radians = {}".format(right_pitch_radians_list)
+    print "right_hand_roll_radians = {}".format(right_roll_radians_list)
+
+    print "right_hand_yaw_degrees = {}".format(right_yaw_degrees_list)
+    print "right_hand_pitch_degrees = {}".format(right_pitch_degrees_list)
+    print "right_hand_roll_degrees = {}".format(right_roll_degrees_list)
+
+
+    return left_yaw_radians_list, left_pitch_radians_list, left_roll_radians_list, right_yaw_radians_list, right_pitch_radians_list, right_roll_radians_list
+    # return left_yaw_radians, left_pitch_radians, left_roll_radians
 
 
 if __name__ == '__main__':

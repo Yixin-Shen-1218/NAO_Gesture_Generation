@@ -23,7 +23,7 @@ def main(session):
     # Send robot to Pose Init
     posture_service.goToPosture("Stand", 1)
 
-    # # # Go to rest position
+    # # Go to rest position
     # motion_service.rest()
 
     # print motion state

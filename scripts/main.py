@@ -12,14 +12,8 @@ from Head import get_head_angle_list
 from Shoulder import get_shoulder_angle_list
 from Elbow import get_elbow_angle_list
 from Wrist import get_wrist_angle_list
-from utils import clamp_matrix
-
-
-# time list, the interval is 1
-# timeLists  = range(1, yaw_radians_list + 1)
-
-# time list, the interval is 0.5
-# timeLists  = [i * 0.5 for i in range(1, 244 + 1)]
+from Hand import get_hand_angle_list
+from utils import clamp_matrix, normalize
 
 def generate_n_copies_of_time_list(time_list, n):
     # Create an empty list to store the result
@@ -101,11 +95,11 @@ def main(session, directional_vecs):
     motion_service.setStiffnesses("Body", 1.0)
 
     # Send robot to Pose Init
-    posture_service.goToPosture("Sit", 1)
+    posture_service.goToPosture("Stand", 1)
 
     # Example showing multiple trajectories
     names = ["HeadYaw", "HeadPitch", "LShoulderPitch", "LShoulderRoll", "RShoulderPitch", "RShoulderRoll", "LElbowYaw", "LElbowRoll",
-             "RElbowYaw", "RElbowRoll", "LWristYaw", "RWristYaw"]
+             "RElbowYaw", "RElbowRoll", "LWristYaw", "RWristYaw", "LHand", "RHand"]
 
     head_yaw_radians, head_pitch_radians, head_roll_radians = get_head_angle_list(directional_vecs)
     print "\n\n"
@@ -122,23 +116,60 @@ def main(session, directional_vecs):
     left_hand_yaw_radians, left_hand_pitch_radians, left_hand_roll_radians, right_hand_yaw_radians, right_hand_pitch_radians, right_hand_roll_radians = get_hand_angle_list(directional_vecs)
     print "\n\n"
 
+    # convert the to 0-1
+    left_hand_roll_radians_normalized = normalize(left_hand_roll_radians)
+    right_hand_roll_radians_normalized = normalize(right_hand_roll_radians)
+
     frame_number = directional_vecs.shape[0]
 
     timeList = get_timestamps(1, frame_number)
     print timeList
 
-    timeLists = generate_n_copies_of_time_list(timeList[:3], n=len(names))
+    print "head yaw radians", head_yaw_radians[:50]
+
+    # timeLists = generate_n_copies_of_time_list(timeList[:3], n=len(names))
+    # print len(timeLists)
+    # # print len(timeLists)
+    # # print timeLists
+    # isAbsolute = True
+    #
+    # motion_service.angleInterpolation(names, [head_yaw_radians[:3], head_pitch_radians[:3], left_shoulder_pitch_radians[:3],
+    #                                           left_shoulder_roll_radians[:3],
+    #                                           right_shoulder_pitch_radians[:3], right_shoulder_roll_radians[:3],
+    #                                   left_elbow_yaw_radians[:3], left_elbow_roll_radians[:3], right_elbow_yaw_radians[:3],
+    #                                   right_elbow_roll_radians[:3], left_wrist_yaw_radians[:3], right_wrist_yaw_radians[:3],
+    #                                   left_hand_roll_radians_normalized[:3], right_hand_roll_radians_normalized[:3]],
+    #                                   timeLists, isAbsolute)
+
+
+    timeLists = generate_n_copies_of_time_list(timeList[:15], n=len(names))
     print len(timeLists)
     # print len(timeLists)
     # print timeLists
     isAbsolute = True
 
-    motion_service.angleInterpolation(names, [head_yaw_radians[:3], head_pitch_radians[:3], left_shoulder_pitch_radians[:3],
-                                              left_shoulder_roll_radians[:3],
-                                              right_shoulder_pitch_radians[:3], right_shoulder_roll_radians[:3],
-                                      left_elbow_yaw_radians[:3], left_elbow_roll_radians[:3], right_elbow_yaw_radians[:3],
-                                      right_elbow_roll_radians[:3], left_wrist_yaw_radians[:3], right_wrist_yaw_radians[:3]],
+    motion_service.angleInterpolation(names, [head_yaw_radians[:15], head_pitch_radians[:15], left_shoulder_pitch_radians[:15],
+                                              left_shoulder_roll_radians[:15],
+                                              right_shoulder_pitch_radians[:15], right_shoulder_roll_radians[:15],
+                                      left_elbow_yaw_radians[:15], left_elbow_roll_radians[:15], right_elbow_yaw_radians[:15],
+                                      right_elbow_roll_radians[:15], left_wrist_yaw_radians[:15], right_wrist_yaw_radians[:15],
+                                      left_hand_roll_radians_normalized[:15], right_hand_roll_radians_normalized[:15]],
                                       timeLists, isAbsolute)
+
+
+    # timeLists = generate_n_copies_of_time_list(timeList[:30], n=len(names))
+    # print len(timeLists)
+    # # print len(timeLists)
+    # # print timeLists
+    # isAbsolute = True
+    #
+    # motion_service.angleInterpolation(names, [head_yaw_radians[:30], head_pitch_radians[:30], left_shoulder_pitch_radians[:30],
+    #                                           left_shoulder_roll_radians[:30],
+    #                                           right_shoulder_pitch_radians[:30], right_shoulder_roll_radians[:30],
+    #                                   left_elbow_yaw_radians[:30], left_elbow_roll_radians[:30], right_elbow_yaw_radians[:30],
+    #                                   right_elbow_roll_radians[:30], left_wrist_yaw_radians[:30], right_wrist_yaw_radians[:30],
+    #                                   left_hand_roll_radians_normalized[:30], right_hand_roll_radians_normalized[:30]],
+    #                                   timeLists, isAbsolute)
 
     # timeLists = generate_n_copies_of_time_list(timeList, n=len(names))
     # print len(timeLists)
@@ -152,7 +183,7 @@ def main(session, directional_vecs):
 
 
     # # Go to rest position
-    # motion_service.rest()
+    motion_service.rest()
 
     # get_angles()
 

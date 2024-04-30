@@ -2,15 +2,21 @@ import math
 
 import numpy as np
 import pandas as pd
+from numpy import mean
 
-from utils import clamp_matrix
+from utils import clamp_matrix, scale_to_range
 
 Left_wrist_yaw_stand_init = math.radians(8.0)
-Right_wrist_yaw_stand_init = math.radians(7.2)
+Right_wrist_yaw_stand_init = math.radians(8.0)
 
-print Left_wrist_yaw_stand_init
-print Right_wrist_yaw_stand_init
+# print Left_wrist_yaw_stand_init
+# print Right_wrist_yaw_stand_init
 
+left_wrist_yaw_radian_range = [math.radians(-30), math.radians(30)]
+# print left_wrist_yaw_radian_range
+
+right_wrist_yaw_radian_range = [math.radians(-30), math.radians(30)]
+# print right_wrist_yaw_radian_range
 
 def cross_product(a, b):
     return (a[1] * b[2] - a[2] * b[1],
@@ -81,17 +87,32 @@ def get_wrist_angle_list(directional_vecs):
         left_pitch_radians_list.append(left_pitch_radians)
         left_roll_radians_list.append(left_roll_radians)
 
-    left_yaw_radians_first_temp = left_yaw_radians_list[0]
-    left_pitch_radians_first_temp = left_pitch_radians_list[0]
-    left_roll_radians_first_temp = left_roll_radians_list[0]
-    for i, yaw_radians in enumerate(left_yaw_radians_list):
-        left_yaw_radians_list[i] = left_yaw_radians_list[i] - left_yaw_radians_first_temp + Left_wrist_yaw_stand_init
+    # For post-processing
+    # left_yaw_radians_first_temp = left_yaw_radians_list[0]
+    # left_pitch_radians_first_temp = left_pitch_radians_list[0]
+    # left_roll_radians_first_temp = left_roll_radians_list[0]
+    # left_yaw_radians_mean = mean(left_yaw_radians_list)
+    # left_pitch_radians_mean = mean(left_pitch_radians_list)
+    # left_roll_radians_mean = mean(left_roll_radians_list)
+    # for i, yaw_radians in enumerate(left_yaw_radians_list):
+    #     # left_yaw_radians_list[i] = left_yaw_radians_list[i]
+    #     left_yaw_radians_list[i] = left_yaw_radians_list[i] - left_yaw_radians_first_temp
+    #     # left_yaw_radians_list[i] = left_yaw_radians_list[i] - left_yaw_radians_first_temp + Left_wrist_yaw_stand_init
+    #     # left_yaw_radians_list[i] = left_yaw_radians_list[i] - left_yaw_radians_mean
+
+    left_yaw_radians_list_scaled = scale_to_range(left_yaw_radians_list, target_min = left_wrist_yaw_radian_range[0], target_max = left_wrist_yaw_radian_range[1])
+    print "yaw_radians_list_scaled = {}".format(left_yaw_radians_list_scaled)
+    left_yaw_degrees_list_scaled = []
+    for radians in left_yaw_radians_list_scaled:
+        left_yaw_degrees_list_scaled.append(math.degrees(radians))
+
+    print "left_yaw_degrees_list_scaled = {}".format(left_yaw_degrees_list_scaled)
 
     for i, pitch_radians in enumerate(left_pitch_radians_list):
-        left_pitch_radians_list[i] = left_pitch_radians_list[i] - left_pitch_radians_first_temp
+        left_pitch_radians_list[i] = left_pitch_radians_list[i]
 
     for i, roll_radians in enumerate(left_roll_radians_list):
-        left_roll_radians_list[i] = left_roll_radians_list[i] - left_roll_radians_first_temp
+        left_roll_radians_list[i] = left_roll_radians_list[i]
 
     for radians in left_yaw_radians_list:
         left_yaw_degrees_list.append(math.degrees(radians))
@@ -145,18 +166,32 @@ def get_wrist_angle_list(directional_vecs):
         right_pitch_radians_list.append(right_pitch_radians)
         right_roll_radians_list.append(right_roll_radians)
 
-    right_yaw_radians_first_temp = right_yaw_radians_list[0]
-    right_pitch_radians_first_temp = right_pitch_radians_list[0]
-    right_roll_radians_first_temp = right_roll_radians_list[0]
-    for i, yaw_radians in enumerate(right_yaw_radians_list):
-        right_yaw_radians_list[i] = right_yaw_radians_list[
-                                        i] - right_yaw_radians_first_temp + Right_wrist_yaw_stand_init
+    # For post-processing
+    # right_yaw_radians_first_temp = right_yaw_radians_list[0]
+    # right_pitch_radians_first_temp = right_pitch_radians_list[0]
+    # right_roll_radians_first_temp = right_roll_radians_list[0]
+    # right_yaw_radians_mean = mean(right_yaw_radians_list)
+    # right_pitch_radians_mean = mean(right_pitch_radians_list)
+    # right_roll_radians_mean = mean(right_roll_radians_list)
+    # for i, yaw_radians in enumerate(right_yaw_radians_list):
+        # right_yaw_radians_list[i] = right_yaw_radians_list[i]
+        # right_yaw_radians_list[i] = right_yaw_radians_list[i] - right_yaw_radians_first_temp
+        # right_yaw_radians_list[i] = right_yaw_radians_list[i] - right_yaw_radians_first_temp + Right_wrist_yaw_stand_init
+        # right_yaw_radians_list[i] = right_yaw_radians_list[i] - right_yaw_radians_mean
+
+    right_yaw_radians_list_scaled = scale_to_range(right_yaw_radians_list, target_min = right_wrist_yaw_radian_range[0], target_max = right_wrist_yaw_radian_range[1])
+    print "right_yaw_radians_list_scaled = {}".format(right_yaw_radians_list_scaled)
+    right_yaw_degrees_list_scaled = []
+    for radians in right_yaw_radians_list_scaled:
+        right_yaw_degrees_list_scaled.append(math.degrees(radians))
+
+    print "right_yaw_degrees_list_scaled = {}".format(right_yaw_degrees_list_scaled)
 
     for i, pitch_radians in enumerate(right_pitch_radians_list):
-        right_pitch_radians_list[i] = right_pitch_radians_list[i] - right_pitch_radians_first_temp
+        right_pitch_radians_list[i] = right_pitch_radians_list[i]
 
     for i, roll_radians in enumerate(right_roll_radians_list):
-        right_roll_radians_list[i] = right_roll_radians_list[i] - right_roll_radians_first_temp
+        right_roll_radians_list[i] = right_roll_radians_list[i]
 
     for radians in right_yaw_radians_list:
         right_yaw_degrees_list.append(math.degrees(radians))
@@ -174,8 +209,9 @@ def get_wrist_angle_list(directional_vecs):
     print "right_wrist_yaw_degrees = {}".format(right_yaw_degrees_list)
     print "right_wrist_pitch_degrees = {}".format(right_pitch_degrees_list)
     print "right_wrist_roll_degrees = {}".format(right_roll_degrees_list)
+    print "------------------------------------------------ Wrist ------------------------------------------------"
 
-    return left_yaw_radians_list, left_pitch_radians_list, left_roll_radians_list, right_yaw_radians_list, right_pitch_radians_list, right_roll_radians_list
+    return left_yaw_radians_list_scaled, left_pitch_radians_list, left_roll_radians_list, right_yaw_radians_list_scaled, right_pitch_radians_list, right_roll_radians_list
 
 
 if __name__ == '__main__':

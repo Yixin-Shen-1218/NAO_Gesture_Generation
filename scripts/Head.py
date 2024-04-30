@@ -154,7 +154,18 @@ def get_head_angle_list(directional_vecs):
 
     print "head_yaw_degrees = {}".format(yaw_degrees_list)
     print "head_pitch_degrees = {}".format(pitch_degrees_list)
-    print "head_roll_degrees = {}".format(roll_degrees_list)
+    print "head_roll_degrees = {} \n".format(roll_degrees_list)
+
+    yaw_degrees_list_scaled = []
+    pitch_degrees_list_scaled = []
+    for i, yaw_radians_scaled in enumerate(yaw_radians_list_scaled):
+        # convert to degree
+        yaw_degrees_list_scaled.append(math.degrees(yaw_radians_list_scaled[i]))
+        pitch_degrees_list_scaled.append(math.degrees(pitch_radians_list_scaled[i]))
+
+    print "yaw_degrees_list_scaled = {}".format(yaw_degrees_list_scaled)
+    print "pitch_degrees_list_scaled = {}".format(pitch_degrees_list_scaled)
+    print "------------------------------------------------ Head ------------------------------------------------"
 
     # return yaw_radians_list, pitch_radians_list, roll_radians_list
     return yaw_radians_list_scaled, pitch_radians_list_scaled, roll_radians_list

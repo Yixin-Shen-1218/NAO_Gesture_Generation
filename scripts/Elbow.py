@@ -16,10 +16,10 @@ def calculate_elbow_orientation(elbow_wrist_squeeze):
 
     for i, elbow_to_wrist_vector in enumerate(elbow_wrist_squeeze):
         # Calculate ElbowYaw (elbow's yaw angle)
-        ElbowYaw = math.atan2(elbow_to_wrist_vector[1], elbow_to_wrist_vector[0])
+        ElbowPitch = math.atan2(elbow_to_wrist_vector[1], elbow_to_wrist_vector[0])
 
         # Calculate ElbowPitch (elbow's pitch angle)
-        ElbowPitch = math.asin(elbow_to_wrist_vector[2])
+        ElbowYaw = math.asin(elbow_to_wrist_vector[2])
 
         # Calculate ElbowRoll (elbow's roll angle)
         ElbowRoll = math.atan2(elbow_to_wrist_vector[0], elbow_to_wrist_vector[1])
@@ -62,9 +62,20 @@ def get_elbow_angle_list(directional_vecs):
 
     right_yaw_radians, right_pitch_radians, right_roll_radians = calculate_elbow_orientation(
         right_elbow_wrist_squeeze)
+
+    # right_yaw_radians = [math.radians(90)+x for x in right_yaw_radians]
+    right_yaw_radians = [-x for x in right_yaw_radians]
+    right_roll_radians = [abs(x) for x in right_roll_radians]
+
     print "right_elbow_yaw_radians = {}".format(right_yaw_radians)
     print "right_elbow_pitch_radians = {}".format(right_pitch_radians)
     print "right_elbow_roll_radians = {}".format(right_roll_radians)
+
+    right_yaw_degrees_after = [math.degrees(x) for x in right_yaw_radians]
+    right_roll_degrees_after = [math.degrees(x) for x in right_roll_radians]
+    print "right_yaw_degrees_after = {}".format(right_yaw_degrees_after)
+    print "right_roll_degrees_after = {}".format(right_roll_degrees_after)
+    print "------------------------------------------------ Elbow ------------------------------------------------"
 
     return left_yaw_radians, left_pitch_radians, left_roll_radians, right_yaw_radians, right_pitch_radians, right_roll_radians
 

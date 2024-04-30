@@ -3,6 +3,7 @@ import math
 import numpy as np
 import pandas as pd
 
+from utils import clamp_matrix, scale_to_range
 
 def calculate_shoulder_orientation(shoulder_elbow_squeeze):
     yaw_radians_list = []
@@ -15,20 +16,13 @@ def calculate_shoulder_orientation(shoulder_elbow_squeeze):
 
     for i, shoulder_to_elbow_vector in enumerate(shoulder_elbow_squeeze):
         # Calculate ShoulderYaw (shoulder's yaw angle)
-        ShoulderYaw = math.atan2(shoulder_to_elbow_vector[1], shoulder_to_elbow_vector[0])
+        ShoulderPitch = math.atan2(shoulder_to_elbow_vector[1], shoulder_to_elbow_vector[0])
 
         # Calculate ShoulderPitch (shoulder's pitch angle)
-        ShoulderPitch = math.asin(shoulder_to_elbow_vector[2])
-
-        # # Calculate ShoulderYaw (shoulder's yaw angle)
-        # ShoulderPitch = - math.atan2(shoulder_to_elbow_vector[1], shoulder_to_elbow_vector[0])
-        #
-        # # Calculate ShoulderPitch (shoulder's pitch angle)
-        # ShoulderYaw = math.asin(shoulder_to_elbow_vector[2])
+        ShoulderYaw = math.asin(shoulder_to_elbow_vector[2])
 
         # Calculate ShoulderRoll (shoulder's roll angle)
         ShoulderRoll = math.atan2(shoulder_to_elbow_vector[0], shoulder_to_elbow_vector[1])
-        # ShoulderRoll = math.atan2(shoulder_to_elbow_vector[0], -shoulder_to_elbow_vector[2])
 
         # Convert angles from radians to degrees if needed
         ShoulderYaw_deg = math.degrees(ShoulderYaw)
@@ -43,9 +37,9 @@ def calculate_shoulder_orientation(shoulder_elbow_squeeze):
         pitch_radians_list.append(ShoulderPitch)
         roll_radians_list.append(ShoulderRoll)
 
-    print "shoulder_yaw_degrees = {}".format(yaw_degrees_list)
-    print "shoulder_pitch_degrees = {}".format(pitch_degrees_list)
-    print "shoulder_roll_degrees = {}".format(roll_degrees_list)
+    print "yaw_degrees = {}".format(yaw_degrees_list)
+    print "pitch_degrees = {}".format(pitch_degrees_list)
+    print "roll_degrees = {}".format(roll_degrees_list)
 
     return yaw_radians_list, pitch_radians_list, roll_radians_list
 
@@ -73,7 +67,15 @@ def get_shoulder_angle_list(directional_vecs):
     print "right_shoulder_pitch_radians = {}".format(right_pitch_radians)
     print "right_shoulder_roll_radians = {}".format(right_roll_radians)
 
-    return left_yaw_radians, left_pitch_radians, left_roll_radians, right_yaw_radians, right_pitch_radians, right_roll_radians
+    # post-processing the right shoulder pitch
+    right_pitch_radians_after_minus = [math.radians(180) - x for x in right_pitch_radians]
+    right_pitch_degrees_after_minus = [math.degrees(x) for x in right_pitch_radians_after_minus]
+    print "right_pitch_radians_after_minus = {}".format(right_pitch_radians_after_minus)
+    print "right_pitch_degrees_after_minus = {}".format(right_pitch_degrees_after_minus)
+
+    print "------------------------------------------------ Shoulder ------------------------------------------------"
+
+    return left_yaw_radians, left_pitch_radians, left_roll_radians, right_yaw_radians, right_pitch_radians_after_minus, right_roll_radians
 
 
 if __name__ == '__main__':
@@ -87,11 +89,24 @@ if __name__ == '__main__':
     # print("LShoulderRoll: {} radians".format(LShoulderRoll_rad))
     # print("LShoulderYaw: {} radians".format(LShoulderYaw_rad))
 
-
     # Test
     obj = pd.read_pickle("../generation_results/o1rERZRFyqE_112_4_0.pkl")
     directional_vecs = obj['out_dir_vec']
     directional_vecs = directional_vecs.reshape(directional_vecs.shape[0], 42, 3)
 
+    # clamp the matrix
+    # process if the element is greater than 1 or less than -1
+    directional_vecs = clamp_matrix(directional_vecs)
+    print directional_vecs.shape
+
     # Only test the first frame
     get_shoulder_angle_list(directional_vecs)
+
+    # # Test (0,1,0)
+    # test_y_vector = np.array([[[0.01,0.99,0.01], [0.01,0.99,0.01], [0.01,0.99,0.01],
+    #                            [0.01,0.99,0.01], [0.01,0.99,0.01], [0.01,0.99,0.01],
+    #                            [0.01,0.99,0.01], [0.01,0.99,0.01], [0.01,0.99,0.01]]])
+    #
+    # test_y_vector = clamp_matrix(test_y_vector)
+    # print test_y_vector.shape
+    # get_shoulder_angle_list(test_y_vector)

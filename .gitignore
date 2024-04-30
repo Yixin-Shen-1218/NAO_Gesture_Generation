@@ -5,3 +5,6 @@ output/
 scripts_learning/
 *.pyc
 *.txt
+scripts/almotion_rest.py
+scripts/almotion_sit.py
+scripts/almotion_stand.py

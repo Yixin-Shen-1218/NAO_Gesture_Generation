@@ -17,52 +17,8 @@ from Wrist import get_wrist_angle_list
 from Hand import get_hand_angle_list
 from utils import clamp_matrix, normalize, get_timestamps, generate_n_copies_of_time_list, remove_redundant_frames, \
     handle_outlier, moving_average, savgol_filter_smooth_radian_list, \
-    exponential_moving_average_smooth, gaussian_smooth
+    exponential_moving_average_smooth, gaussian_smooth, get_angles, play_sound
 
-
-def get_angles():
-    motion_service = session.service("ALMotion")
-
-    # Example that finds the difference between the command and sensed angles.
-    names = "LShoulderPitch"
-    useSensors = True
-    commandAngles = motion_service.getAngles(names, useSensors)
-    print "Command angles:"
-    print str(commandAngles)
-    print ""
-
-    # Example that finds the difference between the command and sensed angles.
-    names = "LShoulderRoll"
-    useSensors = True
-    commandAngles = motion_service.getAngles(names, useSensors)
-    print "Command angles:"
-    print str(commandAngles)
-    print ""
-
-    # Example that finds the difference between the command and sensed angles.
-    names = "RShoulderPitch"
-    useSensors = True
-    commandAngles = motion_service.getAngles(names, useSensors)
-    print "Command angles:"
-    print str(commandAngles)
-    print ""
-
-    # Example that finds the difference between the command and sensed angles.
-    names = "RShoulderRoll"
-    useSensors = True
-    commandAngles = motion_service.getAngles(names, useSensors)
-    print "Command angles:"
-    print str(commandAngles)
-    print ""
-
-def play_sound(path, session):
-    audio_player_service = session.service("ALAudioPlayer")
-
-    # Loads a file and launches the playing the audio
-    fileId = audio_player_service.loadFile(path)
-
-    time.sleep(2)
-    audio_player_service.play(fileId, _async=True)
 
 def main(session, directional_vecs, path, visualize):
     play_sound(path, session)
@@ -130,7 +86,7 @@ def main(session, directional_vecs, path, visualize):
                     left_shoulder_roll_radians, right_shoulder_pitch_radians, right_shoulder_roll_radians,
                     left_elbow_yaw_radians, left_elbow_roll_radians, right_elbow_yaw_radians,
                     right_elbow_roll_radians, left_wrist_yaw_radians, right_wrist_yaw_radians]
-    print "before smoothing =", radians_list[7]
+    # print "before smoothing =", radians_list[7]
 
     smoothed_radians_list = copy.deepcopy(radians_list)
     # smoothed_radians_list = savgol_filter_smooth_radian_list(names, radians_list, window_size=41, polyorder=3, visualize=visualize)
@@ -138,7 +94,7 @@ def main(session, directional_vecs, path, visualize):
     # smoothed_radians_list = moving_average(names, radians_list, window_size=5, visualize=visualize)
     # smoothed_radians_list = exponential_moving_average_smooth(names, radians_list, alpha=0.3, visualize=visualize)
     # smoothed_radians_list = gaussian_smooth(names, radians_list, sigma=5, visualize=visualize)
-    print "after smoothing =", smoothed_radians_list[7]
+    # print "after smoothing =", smoothed_radians_list[7]
     smoothed_radians_list.insert(len(smoothed_radians_list), left_hand_roll_radians_normalized)
     smoothed_radians_list.insert(len(smoothed_radians_list), right_hand_roll_radians_normalized)
     # ------------------------------------------------------------------------------------------
@@ -187,7 +143,7 @@ def main(session, directional_vecs, path, visualize):
     # # Go to rest position
     motion_service.rest()
 
-    # get_angles()
+    # get_angles(session)
 
 
 if __name__ == "__main__":

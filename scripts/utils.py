@@ -1,4 +1,5 @@
 import copy
+import time
 
 import numpy as np
 from scipy.ndimage import gaussian_filter1d
@@ -90,6 +91,49 @@ def get_timestamps(fps, frame_number):
         timestamps.append(timestamp)
     return timestamps
 
+def play_sound(path, session):
+    audio_player_service = session.service("ALAudioPlayer")
+
+    # Loads a file and launches the playing the audio
+    fileId = audio_player_service.loadFile(path)
+
+    # time.sleep(2)
+    audio_player_service.play(fileId, _async=True)
+
+def get_angles(session):
+    motion_service = session.service("ALMotion")
+
+    # Example that finds the difference between the command and sensed angles.
+    names = "LShoulderPitch"
+    useSensors = True
+    commandAngles = motion_service.getAngles(names, useSensors)
+    print "Command angles:"
+    print str(commandAngles)
+    print ""
+
+    # Example that finds the difference between the command and sensed angles.
+    names = "LShoulderRoll"
+    useSensors = True
+    commandAngles = motion_service.getAngles(names, useSensors)
+    print "Command angles:"
+    print str(commandAngles)
+    print ""
+
+    # Example that finds the difference between the command and sensed angles.
+    names = "RShoulderPitch"
+    useSensors = True
+    commandAngles = motion_service.getAngles(names, useSensors)
+    print "Command angles:"
+    print str(commandAngles)
+    print ""
+
+    # Example that finds the difference between the command and sensed angles.
+    names = "RShoulderRoll"
+    useSensors = True
+    commandAngles = motion_service.getAngles(names, useSensors)
+    print "Command angles:"
+    print str(commandAngles)
+    print ""
 
 def remove_redundant_frames(obj):
     directional_vecs = obj['out_dir_vec']

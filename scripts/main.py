@@ -15,7 +15,6 @@ from Shoulder import get_shoulder_angle_list
 from Elbow import get_elbow_angle_list
 from Wrist import get_wrist_angle_list
 from Hand import get_hand_angle_list
-from Speech import get_available_languages
 from utils import clamp_matrix, normalize, get_timestamps, generate_n_copies_of_time_list, remove_redundant_frames, \
     handle_outlier, moving_average, savgol_filter_smooth_radian_list, \
     exponential_moving_average_smooth, gaussian_smooth

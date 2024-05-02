@@ -15,10 +15,10 @@ def calculate_shoulder_orientation(shoulder_elbow_squeeze):
     roll_degrees_list = []
 
     for i, shoulder_to_elbow_vector in enumerate(shoulder_elbow_squeeze):
-        # Calculate ShoulderYaw (shoulder's yaw angle)
+        # Calculate ShoulderPitch (shoulder's pitch angle)
         ShoulderPitch = math.atan2(shoulder_to_elbow_vector[1], shoulder_to_elbow_vector[0])
 
-        # Calculate ShoulderPitch (shoulder's pitch angle)
+        # Calculate ShoulderYaw (shoulder's yaw angle)
         ShoulderYaw = math.asin(shoulder_to_elbow_vector[2])
 
         # Calculate ShoulderRoll (shoulder's roll angle)
@@ -56,6 +56,16 @@ def get_shoulder_angle_list(directional_vecs):
     print "left_shoulder_pitch_radians = {}".format(left_pitch_radians)
     print "left_shoulder_roll_radians = {}".format(left_roll_radians)
 
+    # post-processing the right shoulder pitch
+    left_pitch_radians_after_minus = [x + math.radians(0) for x in left_pitch_radians]
+    left_pitch_degrees_after_minus = [math.degrees(x) for x in left_pitch_radians_after_minus]
+    print "left_pitch_radians_after_minus = {}".format(left_pitch_radians_after_minus)
+    print "left_pitch_degrees_after_minus = {}".format(left_pitch_degrees_after_minus)
+
+    left_roll_radians_after_minus = [x + math.radians(0) for x in left_roll_radians]
+    left_roll_degrees_after_minus = [math.degrees(x) for x in left_roll_radians_after_minus]
+    print "left_roll_radians_after_minus = {}".format(left_roll_radians_after_minus)
+    print "left_roll_degrees_after_minus = {}".format(left_roll_degrees_after_minus)
     # ------------------------------------------- Right -------------------------------------------
     # Vector from right shoulder-elbow
     right_shoulder_elbow_squeeze = np.squeeze(directional_vecs[:, [20], :])
@@ -75,7 +85,7 @@ def get_shoulder_angle_list(directional_vecs):
 
     print "------------------------------------------------ Shoulder ------------------------------------------------"
 
-    return left_yaw_radians, left_pitch_radians, left_roll_radians, right_yaw_radians, right_pitch_radians_after_minus, right_roll_radians
+    return left_yaw_radians, left_pitch_radians_after_minus, left_roll_radians_after_minus, right_yaw_radians, right_pitch_radians_after_minus, right_roll_radians
 
 
 if __name__ == '__main__':
@@ -90,23 +100,24 @@ if __name__ == '__main__':
     # print("LShoulderYaw: {} radians".format(LShoulderYaw_rad))
 
     # Test
-    obj = pd.read_pickle("../generation_results/o1rERZRFyqE_112_4_0.pkl")
+    obj = pd.read_pickle("../generation_results/_soZahWpS-0_57_0_8.pkl")
     directional_vecs = obj['out_dir_vec']
     directional_vecs = directional_vecs.reshape(directional_vecs.shape[0], 42, 3)
 
     # clamp the matrix
     # process if the element is greater than 1 or less than -1
     directional_vecs = clamp_matrix(directional_vecs)
-    print directional_vecs.shape
+    # print directional_vecs.shape
 
     # Only test the first frame
-    get_shoulder_angle_list(directional_vecs)
+    left_yaw_radians, left_pitch_radians, left_roll_radians, right_yaw_radians, right_pitch_radians_after_minus, right_roll_radians = get_shoulder_angle_list(directional_vecs)
+    print "left_pitch_radians[0]", left_pitch_radians[0], "left_pitch_radians[0] degree", math.degrees(left_pitch_radians[0])
+    print "left_pitch_radians[15]", left_pitch_radians[15], "left_pitch_radians[15] degree", math.degrees(left_pitch_radians[15])
+    print "left_roll_radians[0]", left_roll_radians[0], "left_roll_radians[0] degree", math.degrees(left_roll_radians[0])
+    print "left_roll_radians[15]", left_roll_radians[15], "left_roll_radians[15] degree", math.degrees(left_roll_radians[15])
 
-    # # Test (0,1,0)
-    # test_y_vector = np.array([[[0.01,0.99,0.01], [0.01,0.99,0.01], [0.01,0.99,0.01],
-    #                            [0.01,0.99,0.01], [0.01,0.99,0.01], [0.01,0.99,0.01],
-    #                            [0.01,0.99,0.01], [0.01,0.99,0.01], [0.01,0.99,0.01]]])
-    #
-    # test_y_vector = clamp_matrix(test_y_vector)
-    # print test_y_vector.shape
-    # get_shoulder_angle_list(test_y_vector)
+    print "right_pitch_radians_after_minus[0]", right_pitch_radians_after_minus[0], "right_pitch_radians_after_minus[0] degree", math.degrees(right_pitch_radians_after_minus[0])
+    print "right_pitch_radians_after_minus[15]", right_pitch_radians_after_minus[15], "right_pitch_radians_after_minus[15] degree", math.degrees(right_pitch_radians_after_minus[15])
+    print "right_roll_radians[0]", right_roll_radians[0], "right_roll_radians[0] degree", math.degrees(right_roll_radians[0])
+    print "right_roll_radians[15]", right_roll_radians[15], "right_roll_radians[15] degree", math.degrees(right_roll_radians[15])
+

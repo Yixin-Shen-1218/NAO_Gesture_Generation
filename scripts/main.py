@@ -21,8 +21,6 @@ from utils import clamp_matrix, normalize, get_timestamps, generate_n_copies_of_
 
 
 def main(session, directional_vecs, path, visualize):
-    play_sound(path, session)
-
     # Get the service ALMotion.
     motion_service = session.service("ALMotion")
     posture_service = session.service("ALRobotPosture")
@@ -43,6 +41,9 @@ def main(session, directional_vecs, path, visualize):
 
     # Send robot to Pose Init
     posture_service.goToPosture("Stand", 1)
+
+    # play the speech
+    play_sound(path, session)
 
     # Example showing multiple trajectories
     names = ["HeadYaw", "HeadPitch", "LShoulderPitch", "LShoulderRoll", "RShoulderPitch", "RShoulderRoll", "LElbowYaw",
@@ -71,10 +72,7 @@ def main(session, directional_vecs, path, visualize):
     left_hand_roll_radians_normalized = normalize(left_hand_roll_radians)
     right_hand_roll_radians_normalized = normalize(right_hand_roll_radians)
 
-    # Use the min-max interpolation
-
     frame_number = directional_vecs.shape[0]
-
     timeList = get_timestamps(15, frame_number)
     # print timeList
 
@@ -132,6 +130,28 @@ def main(session, directional_vecs, path, visualize):
     #                                   right_elbow_roll_radians[:30], left_wrist_yaw_radians[:30], right_wrist_yaw_radians[:30],
     #                                   left_hand_roll_radians_normalized[:30], right_hand_roll_radians_normalized[:30]],
     #                                   timeLists, isAbsolute)
+
+    # timeLists = generate_n_copies_of_time_list(timeList[:60], n=len(names))
+    # isAbsolute = True
+    #
+    # motion_service.angleInterpolation(names, [head_yaw_radians[:60], head_pitch_radians[:60], left_shoulder_pitch_radians[:60],
+    #                                           left_shoulder_roll_radians[:60],
+    #                                           right_shoulder_pitch_radians[:60], right_shoulder_roll_radians[:60],
+    #                                   left_elbow_yaw_radians[:60], left_elbow_roll_radians[:60], right_elbow_yaw_radians[:60],
+    #                                   right_elbow_roll_radians[:60], left_wrist_yaw_radians[:60], right_wrist_yaw_radians[:60],
+    #                                   left_hand_roll_radians_normalized[:60], right_hand_roll_radians_normalized[:60]],
+    #                                   timeLists, isAbsolute)
+
+    # timeLists = generate_n_copies_of_time_list(timeList[:70], n=len(names))
+    # isAbsolute = True
+    #
+    # motion_service.angleInterpolation(names, [head_yaw_radians[:70], head_pitch_radians[:70], left_shoulder_pitch_radians[:70],
+    #                                           left_shoulder_roll_radians[:70],
+    #                                           right_shoulder_pitch_radians[:70], right_shoulder_roll_radians[:70],
+    #                                   left_elbow_yaw_radians[:70], left_elbow_roll_radians[:70], right_elbow_yaw_radians[:70],
+    #                                   right_elbow_roll_radians[:70], left_wrist_yaw_radians[:70], right_wrist_yaw_radians[:70],
+    #                                   left_hand_roll_radians_normalized[:70], right_hand_roll_radians_normalized[:70]],
+    #                                   timeLists, isAbsolute)
     # ------------------------------------------------------------------------------------------
 
     timeLists = generate_n_copies_of_time_list(timeList, n=len(names))
@@ -140,7 +160,7 @@ def main(session, directional_vecs, path, visualize):
 
     # motion_service.angleInterpolation(names, smoothed_radians_list, timeLists, isAbsolute)
     motion_service.angleInterpolationBezier(names, timeLists, smoothed_radians_list)
-    # # Go to rest position
+    # Go to rest position
     motion_service.rest()
 
     # get_angles(session)
@@ -157,7 +177,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    file_name = "_soZahWpS-0_57_0_8"
+    file_name = "HBpoEMD25Io_156_0_11"
     obj = pd.read_pickle("../generation_results/{}.pkl".format(file_name))
     path = "/data/home/nao/audio/{}.wav".format(file_name)
 

@@ -52,20 +52,33 @@ def get_elbow_angle_list(directional_vecs):
     left_yaw_radians, left_pitch_radians, left_roll_radians = calculate_elbow_orientation(
         left_elbow_wrist_squeeze)
 
+    left_yaw_radians = [-math.radians(45) + x for x in left_yaw_radians]
+    # left_yaw_radians = [x for x in left_yaw_radians]
+
+    # left_roll_radians = [-abs(x) for x in left_roll_radians]
+    left_roll_radians = [-abs(x) - math.radians(45) for x in left_roll_radians]
+
     print "left_elbow_yaw_radians = {}".format(left_yaw_radians)
     print "left_elbow_pitch_radians = {}".format(left_pitch_radians)
     print "left_elbow_roll_radians = {}".format(left_roll_radians)
 
+    left_yaw_degrees_after = [math.degrees(x) for x in left_yaw_radians]
+    left_roll_degrees_after = [math.degrees(x) for x in left_roll_radians]
+    print "left_yaw_degrees_after = {}".format(left_yaw_degrees_after)
+    print "left_roll_degrees_after = {}".format(left_roll_degrees_after)
     # ------------------------------------------- Right -------------------------------------------
     # Vector from right elbow-wrist
     right_elbow_wrist_squeeze = np.squeeze(directional_vecs[:, [21], :])
 
-    right_yaw_radians, right_pitch_radians, right_roll_radians = calculate_elbow_orientation(
-        right_elbow_wrist_squeeze)
+    right_yaw_radians, right_pitch_radians, right_roll_radians = calculate_elbow_orientation(right_elbow_wrist_squeeze)
 
-    # right_yaw_radians = [math.radians(90)+x for x in right_yaw_radians]
-    right_yaw_radians = [-x for x in right_yaw_radians]
+
+    right_yaw_radians = [x + math.radians(135) for x in right_yaw_radians]
+    # right_yaw_radians = [x + math.radians(180) for x in right_yaw_radians]
+
+    # 1, 15, 30, 60 good, the last frame is not very good
     right_roll_radians = [abs(x) for x in right_roll_radians]
+
 
     print "right_elbow_yaw_radians = {}".format(right_yaw_radians)
     print "right_elbow_pitch_radians = {}".format(right_pitch_radians)
@@ -92,7 +105,7 @@ if __name__ == '__main__':
     # print("LShoulderYaw: {} radians".format(LShoulderYaw_rad))
 
     # Test
-    obj = pd.read_pickle("../generation_results/o1rERZRFyqE_112_4_0.pkl")
+    obj = pd.read_pickle("../generation_results/Wh7-rF4E-Eg_141_0_15.pkl")
     directional_vecs = obj['out_dir_vec']
     directional_vecs = directional_vecs.reshape(directional_vecs.shape[0], 42, 3)
     # clamp the matrix
@@ -101,4 +114,13 @@ if __name__ == '__main__':
 
 
     # Only test the first frame
-    get_elbow_angle_list(directional_vecs)
+    left_yaw_radians, left_pitch_radians, left_roll_radians, right_yaw_radians, right_pitch_radians, right_roll_radians = get_elbow_angle_list(directional_vecs)
+    print "left_yaw_radians[0]", left_yaw_radians[0], "left_yaw_radians[0] degree", math.degrees(left_yaw_radians[0])
+    print "left_yaw_radians[14]", left_yaw_radians[14], "left_yaw_radians[14] degree", math.degrees(left_yaw_radians[14])
+    print "left_roll_radians[0]", left_roll_radians[0], "left_roll_radians[0] degree", math.degrees(left_roll_radians[0])
+    print "left_roll_radians[14]", left_roll_radians[14], "left_roll_radians[14] degree", math.degrees(left_roll_radians[14])
+
+    print "right_yaw_radians[0]", right_yaw_radians[0], "right_yaw_radians[0] degree", math.degrees(right_yaw_radians[0])
+    print "right_yaw_radians[14]", right_yaw_radians[14], "right_yaw_radians[14] degree", math.degrees(right_yaw_radians[14])
+    print "right_roll_radians[0]", right_roll_radians[0], "right_yaw_radians[0] degree", math.degrees(right_roll_radians[0])
+    print "right_roll_radians[14]", right_roll_radians[14], "right_yaw_radians[14] degree", math.degrees(right_roll_radians[14])

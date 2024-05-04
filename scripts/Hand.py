@@ -137,7 +137,7 @@ def get_hand_angle_list(directional_vecs):
 
 if __name__ == '__main__':
     # Test
-    obj = pd.read_pickle("../generation_results/o1rERZRFyqE_112_4_0.pkl")
+    obj = pd.read_pickle("../generation_results/_3IOjpSGFqY_164_0_12.pkl")
     directional_vecs = obj['out_dir_vec']
     directional_vecs = directional_vecs.reshape(directional_vecs.shape[0], 42, 3)
 

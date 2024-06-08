@@ -155,7 +155,7 @@ def main(session, directional_vecs, path, visualize):
     # ------------------------------------------------------------------------------------------
 
     timeLists = generate_n_copies_of_time_list(timeList, n=len(names))
-    print len(timeLists)
+    # print len(timeLists)
     isAbsolute = True
 
     # motion_service.angleInterpolation(names, smoothed_radians_list, timeLists, isAbsolute)
@@ -168,7 +168,7 @@ def main(session, directional_vecs, path, visualize):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--ip", type=str, default="10.61.144.165",
+    parser.add_argument("--ip", type=str, default="10.61.144.32",
                         help="Robot IP address. On robot or Local Naoqi: use '127.0.0.1'.")
     parser.add_argument("--port", type=int, default=9559,
                         help="Naoqi port number")
@@ -177,7 +177,24 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    file_name = "_3IOjpSGFqY_164_0_12"
+    # Turkish
+    # file_name = "vXW0jfZqmzo_117_1_5"
+
+    # French
+    file_name = "pHyi9IZuyF4_206_0_9"
+
+    # Italian
+    # file_name = "_soZahWpS-0_57_0_8"
+
+    # Indonesian
+    # file_name = "HBpoEMD25Io_156_0_11"
+
+    # German
+    # file_name = "mTok2EyMLvE_32_1_3"
+
+    # Japanese
+    # file_name = "3djAkIpp7C0_131_0_16"
+
     obj = pd.read_pickle("../generation_results/{}.pkl".format(file_name))
     path = "/data/home/nao/audio/{}.wav".format(file_name)
 

@@ -26,7 +26,24 @@ This repository contains the system used for rendering gestures on the NAO robot
 
 
 
+## Postprocessing Table
 
+| joint name     | Motion                                  | Min Range (deg) | Max Range (deg) | post-processing (deg) |
+| -------------- | --------------------------------------- | --------------- | --------------- | --------------------- |
+| HeadYaw        | Head joint twist (Z)                    | -119.5          | 119.5           | scale to [-15, 15]    |
+| HeadPitch      | Head joint front and back (Y)           | -38.5           | 29.5            | scale to [-15, 0]     |
+| LShoulderPitch | Left shoulder joint front and back (Y)  | -119.5          | 119.5           | x                     |
+| LShoulderRoll  | Left shoulder joint right and left (Z)  | -18.0           | 76.0            | x                     |
+| LElbowYaw      | Left shoulder joint twist (X)           | -119.5          | 119.5           | x - 45                |
+| LElbowRoll     | Left elbow joint (Z)                    | -88.5           | -2.0            | - abs(x) - 45         |
+| LWristYaw      | Left wrist joint (X)                    | -104.5          | 104.5           | - x                   |
+| LHand          | Left hand                               | Open and Close  | Open and Close  | normalization         |
+| RShoulderPitch | Right shoulder joint front and back (Y) | -119.5          | 119.5           | 180 - x               |
+| RShoulderRoll  | Right shoulder joint right and left (Z) | -76.0           | 18.0            | x                     |
+| RElbowYaw      | Right shoulder joint twist (X)          | -119.5          | 119.5           | x + 135               |
+| RElbowRoll     | Right elbow joint (Z)                   | 2.0             | 88.5            | abs(x)                |
+| RWristYaw      | Right wrist joint (X)                   | -104.5          | 104.5           | abs(x)                |
+| RHand          | Right hand                              | Open and Close  | Open and Close  | normalization         |
 
 
 

@@ -106,3 +106,24 @@ This repository contains the system used for rendering gestures on the NAO robot
         (39, 41, 0.15), # 40, right eye-right ear
         (40, 42, 0.15), # 41, left eye-left ear
     ]
+
+
+# Citation
+If you find our work useful, please consider citing us!
+
+```bibtex
+@article{Shen2025TEDculture,
+  title        = {TED-culture: culturally inclusive co-speech gesture generation for embodied social agents},
+  author       = {Shen, Yixin and Johal, Wafa},
+  journal      = {Frontiers in Robotics and AI},
+  volume       = {12},
+  pages        = {1546765},
+  year         = {2025},
+  doi          = {10.3389/frobt.2025.1546765},
+  url          = {https://www.frontiersin.org/journals/robotics-and-ai/articles/10.3389/frobt.2025.1546765}
+}
+```
+
+# License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
